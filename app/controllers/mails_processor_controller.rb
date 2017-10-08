@@ -7,7 +7,7 @@ class MailsProcessorController < ApplicationController
   end
 
   def import
-    CSV.foreach(params[:file][:data].path, headers: false).each_slice(EMAIL_SLICE_SIZE) do |csv|
+    CSV.foreach(params[:contact][:file_data].path, headers: false).each_slice(EMAIL_SLICE_SIZE) do |csv|
       new_emails = csv.flatten
       existing_emails = Contact.where(email: new_emails).pluck(:email)
       email_attrs = (new_emails - existing_emails).map{|e| {email: e}}
@@ -18,7 +18,7 @@ class MailsProcessorController < ApplicationController
   end
 
   def angry
-    CSV.foreach(params[:file][:data].path, headers: false).each_slice(EMAIL_SLICE_SIZE) do |csv|
+    CSV.foreach(params[:contact][:file_data].path, headers: false).each_slice(EMAIL_SLICE_SIZE) do |csv|
       Contact.where(email: csv.flatten).update_all(angry: true)
     end
 
@@ -26,7 +26,7 @@ class MailsProcessorController < ApplicationController
   end
 
   def exclude
-    CSV.foreach(params[:file][:data].path, headers: false).each_slice(EMAIL_SLICE_SIZE) do |csv|
+    CSV.foreach(params[:contact][:file_data].path, headers: false).each_slice(EMAIL_SLICE_SIZE) do |csv|
       Contact.where(email: csv.flatten).update_all(excluded: true)
     end
 

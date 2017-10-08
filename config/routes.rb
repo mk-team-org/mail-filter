@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  devise_for :users
   post 'mails_processor/import'
   post 'mails_processor/exclude'
   post 'mails_processor/angry'
