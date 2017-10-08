@@ -1,0 +1,6 @@
+h1 MailsProcessor#home
+= simple_form_for Object.new, url: mails_processor_import_path do |f|
+  p Import:
+  = f.input :import, as: :file
+  = f.button :submit
+
