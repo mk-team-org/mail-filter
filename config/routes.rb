@@ -1,7 +1,10 @@
 Rails.application.routes.draw do
+
   post 'mails_processor/import'
   post 'mails_processor/exclude'
-  get 'mails_processor/download'
+  post 'mails_processor/angry'
+  post 'mails_processor/download'
+  post 'search/for_email'
 
   root 'mails_processor#home'
 

@@ -18,6 +18,7 @@ gem 'jbuilder', '~> 2.5'
 
 gem 'slim-rails'
 gem 'simple_form'
+gem 'bulk_insert'
 
 group :development, :test do
   gem 'pry-rails'

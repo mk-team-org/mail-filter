@@ -1,6 +1,42 @@
-h1 MailsProcessor#home
-= simple_form_for Object.new, url: mails_processor_import_path do |f|
-  p Import:
-  = f.input :import, as: :file
-  = f.button :submit
-
+h1 Mail 
+table
+  tr
+    td
+      = simple_form_for ModelDummy.dummy, url: mails_processor_import_path do |f|
+        p Import:
+        = f.input :data, as: :file, label: false
+        = f.button :submit, value: 'Importuj', data: {disable_with: "Importuję..."}
+    td
+      = simple_form_for ModelDummy.dummy, url: mails_processor_exclude_path do |f|
+        p Oznaczanie wysłanych:
+        = f.input :data, as: :file, label: false
+        = f.button :submit, value: 'Wyrzuć z listy', data: {disable_with: "Wyrzucam..."}
+    td
+      = simple_form_for ModelDummy.dummy, url: mails_processor_angry_path do |f|
+        p Wkurwieni:
+        = f.input :data, as: :file, label: false
+        = f.button :submit, value: 'Wykurwij', data: {disable_with: "Wykurwiam..."}
+    td
+      = simple_form_for ModelDummy.dummy, url: mails_processor_download_path do |f|
+        p Pobieranie:
+        = f.input :amount, as: :integer, label: false, placeholder: 'Liczba maili', input_html: {value: 100000}
+        = f.button :submit, value: 'Pobierz listę', data: {disable_with: "Generuję..."}
+  tr
+    td colspan="4"
+      p Wyszukiwator:
+      = simple_form_for Contact.new, url: search_for_email_path do |f|
+        = f.input :email, label: false, placeholder: 'Podaj email'
+        = f.button :submit, value: 'Sprawdź', data: {disable_with: "Szukam..."}
+  tr
+    td colspan="4"
+      - if @found_contact.present?
+        p Email:
+        = @found_contact.email
+        p Wykorzystany?
+        = yes_no(@found_contact.excluded)
+        p Wkurwiony?
+        = yes_no(@found_contact.angry)
+        p Dodany:
+        = @found_contact.created_at.to_formatted_s
+        p Ostatnio zmieniony
+        = @found_contact.updated_at.to_formatted_s
