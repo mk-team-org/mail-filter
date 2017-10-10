@@ -22,7 +22,3 @@ development:
 test:
   <<: *default
   database: mail_filter_test
-
-production:
-  <<: *default
-  database: mail_filter_production
