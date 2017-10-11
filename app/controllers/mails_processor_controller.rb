@@ -9,12 +9,7 @@ class MailsProcessorController < ApplicationController
   def import
     # CSV.foreach(params[:contact][:file_data].path, headers: false).each_slice(EMAIL_SLICE_SIZE) do |csv|
     IO.readlines(params[:contact][:file_data].path).each_slice(EMAIL_SLICE_SIZE) do |lines|
-      new_emails = lines.map do |line|
-        ActiveSupport::Inflector.transliterate(line).strip
-      end.reject(&:blank?)
-      existing_emails = Contact.where(email: new_emails).pluck(:email)
-      email_attrs = (new_emails - existing_emails).map{|e| {email: e}}
-      Contact.bulk_insert(values: email_attrs)
+      ImportMailWorker.perform_async(lines)
     end
 
     redirect_to root_path

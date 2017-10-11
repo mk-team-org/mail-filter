@@ -20,6 +20,7 @@ gem 'slim-rails'
 gem 'simple_form'
 gem 'bulk_insert'
 gem 'devise'
+gem 'sidekiq'
 
 group :development, :test do
   gem 'puma', '~> 3.0'
