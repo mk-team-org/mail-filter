@@ -53,14 +53,14 @@ table
         |Wielkość bazy: 
         = Contact.count
       p
-        |W tym wkurwionych:
-        = Contact.where(angry: true).count
+        |W tym wkurwionych (ale niewykorzystanych): 
+        = Contact.where(angry: true, excluded: false).count
       p
-        |Wykorzystanych:
-        = Contact.where(excluded: true).count
+        |Wykorzystanych (ale niewkurwionych): 
+        = Contact.where(angry: false, excluded: true).count
       p
-        |Wykorzystanych i wkurwionych (jednocześnie):
+        |Wykorzystanych i wkurwionych (jednocześnie): 
         = Contact.where(angry: true, excluded: true).count
       p
-        |Niewykorzystanych i niewkurwionych (jednocześnie):
+        |Niewykorzystanych i niewkurwionych (jednocześnie): 
         = Contact.where(angry: false, excluded: false).count
