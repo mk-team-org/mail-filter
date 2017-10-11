@@ -47,3 +47,20 @@ table
         = @found_contact.created_at.to_formatted_s
         p Ostatnio zmieniony
         = @found_contact.updated_at.to_formatted_s
+  tr
+    td colspan="4"
+      p 
+        |Wielkość bazy: 
+        = Contact.count
+      p
+        |W tym wkurwionych:
+        = Contact.where(angry: true).count
+      p
+        |Wykorzystanych:
+        = Contact.where(excluded: true).count
+      p
+        |Wykorzystanych i wkurwionych (jednocześnie):
+        = Contact.where(angry: true, excluded: true).count
+      p
+        |Niewykorzystanych i niewkurwionych (jednocześnie):
+        = Contact.where(angry: false, excluded: false).count
