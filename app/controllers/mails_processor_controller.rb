@@ -2,6 +2,7 @@ require 'csv'
 require 'sidekiq/api'
 
 class MailsProcessorController < ApplicationController
+  before_action :authenticate_user!
   EMAIL_SLICE_SIZE = Rails.env.development? ? 10 : 1000
 
   def home
