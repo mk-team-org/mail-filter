@@ -33,6 +33,7 @@ group :development do
   gem 'capistrano-rvm'
   gem 'capistrano-rails', '~> 1.3'
   gem 'capistrano-unicorn-nginx', '~> 4.1.0'
+  gem 'capistrano-sidekiq'
   gem 'web-console', '>= 3.3.0'
   gem 'listen', '~> 3.0.5'
   gem 'spring'

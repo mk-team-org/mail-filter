@@ -1,15 +1,18 @@
 require 'csv'
+require 'sidekiq/api'
 
 class MailsProcessorController < ApplicationController
   EMAIL_SLICE_SIZE = Rails.env.development? ? 10 : 1000
 
   def home
+    @import_in_progress = (Sidekiq::Queue.new.size + Sidekiq::RetrySet.new.size + Sidekiq::ScheduledSet.new.size).zero?
   end
 
   def import
     # CSV.foreach(params[:contact][:file_data].path, headers: false).each_slice(EMAIL_SLICE_SIZE) do |csv|
     IO.readlines(params[:contact][:file_data].path).each_slice(EMAIL_SLICE_SIZE) do |lines|
       ImportMailWorker.perform_async(lines)
+      sleep(1)
     end
 
     redirect_to root_path
