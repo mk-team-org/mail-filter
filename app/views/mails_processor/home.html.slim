@@ -3,7 +3,9 @@ h1 Mail
   h2 IMPORT TRWA... Odśwież za chwilę. 
   p Operacje dodawania i zmiany na bazie wstrzymane.
   p
-    |Pozostało pakietów (każdy po ~1000 obiektów): 
+    |Pozostało pakietów (każdy po ~
+    = MailsProcessorController::EMAIL_SLICE_SIZE
+    '  obiektów): 
     = @import_size
   p
 table
