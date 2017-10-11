@@ -1,23 +1,28 @@
 h1 Mail 
 - if @import_in_progress
-  h2 IMPORT TRWA... Odśwież za chwilę.
+  h2 IMPORT TRWA... Odśwież za chwilę. 
+  p Operacje dodawania i zmiany na bazie wstrzymane.
+  p
+    |Pozostało pakietów (każdy po ~1000 obiektów): 
+    = @import_size
+  p
 table
   tr
     td
       = simple_form_for Contact.new, url: mails_processor_import_path do |f|
         p Import:
         = f.input :file_data, as: :file, label: false
-        = f.button :submit, value: 'Importuj', data: {disable_with: "Importuję..."}
+        = f.button :submit, value: 'Importuj', data: {disable_with: "Importuję..."}, disabled: @import_in_progress
     td
       = simple_form_for Contact.new, url: mails_processor_exclude_path do |f|
         p Oznaczanie wysłanych:
         = f.input :file_data, as: :file, label: false
-        = f.button :submit, value: 'Wyrzuć z listy', data: {disable_with: "Wyrzucam..."}
+        = f.button :submit, value: 'Wyrzuć z listy', data: {disable_with: "Wyrzucam..."}, disabled: @import_in_progress
     td
       = simple_form_for Contact.new, url: mails_processor_angry_path do |f|
         p Wkurwieni:
         = f.input :file_data, as: :file, label: false
-        = f.button :submit, value: 'Wykurwij', data: {disable_with: "Wykurwiam..."}
+        = f.button :submit, value: 'Wykurwij', data: {disable_with: "Wykurwiam..."}, disabled: @import_in_progress
     td
       = simple_form_for Contact.new, url: mails_processor_download_path do |f|
         p Pobieranie:

@@ -6,14 +6,15 @@ class MailsProcessorController < ApplicationController
   EMAIL_SLICE_SIZE = Rails.env.development? ? 10 : 1000
 
   def home
-    @import_in_progress = (Sidekiq::Queue.new.size + Sidekiq::RetrySet.new.size + Sidekiq::ScheduledSet.new.size).nonzero?
+    @import_size = Sidekiq::Queue.new.size + Sidekiq::RetrySet.new.size + Sidekiq::ScheduledSet.new.size
+    @import_in_progress = @import_size.nonzero?
   end
 
   def import
     # CSV.foreach(params[:contact][:file_data].path, headers: false).each_slice(EMAIL_SLICE_SIZE) do |csv|
     IO.readlines(params[:contact][:file_data].path).each_slice(EMAIL_SLICE_SIZE) do |lines|
       new_emails = lines.map do |email|
-        ActiveSupport::Inflector.transliterate(email).strip
+        ActiveSupport::Inflector.transliterate(email).strip.downcase
       end.reject(&:blank?)
 
       ImportMailWorker.perform_async(new_emails)
@@ -25,7 +26,7 @@ class MailsProcessorController < ApplicationController
   def angry
     IO.readlines(params[:contact][:file_data].path).each_slice(EMAIL_SLICE_SIZE) do |lines|
       emails = lines.map do |line|
-        ActiveSupport::Inflector.transliterate(line).strip
+        ActiveSupport::Inflector.transliterate(line).strip.downcase
       end.reject(&:blank?)
       Contact.where(email: emails).update_all(angry: true)
     end
@@ -36,7 +37,7 @@ class MailsProcessorController < ApplicationController
   def exclude
     IO.readlines(params[:contact][:file_data].path).each_slice(EMAIL_SLICE_SIZE) do |lines|
       emails = lines.map do |line|
-        ActiveSupport::Inflector.transliterate(line).strip
+        ActiveSupport::Inflector.transliterate(line).strip.downcase
       end.reject(&:blank?)
       Contact.where(email: emails).update_all(excluded: true)
     end
