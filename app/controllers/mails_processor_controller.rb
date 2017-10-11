@@ -28,7 +28,7 @@ class MailsProcessorController < ApplicationController
       emails = lines.map do |line|
         ActiveSupport::Inflector.transliterate(line).strip.downcase
       end.reject(&:blank?)
-      Contact.where(email: emails).update_all(angry: true)
+      Contact.where(email: emails).in_batches.update_all(angry: true)
     end
 
     redirect_to root_path
@@ -39,7 +39,7 @@ class MailsProcessorController < ApplicationController
       emails = lines.map do |line|
         ActiveSupport::Inflector.transliterate(line).strip.downcase
       end.reject(&:blank?)
-      Contact.where(email: emails).update_all(excluded: true)
+      Contact.where(email: emails).in_batches.update_all(excluded: true)
     end
 
     redirect_to root_path
