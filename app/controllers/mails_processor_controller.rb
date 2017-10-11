@@ -3,7 +3,7 @@ require 'sidekiq/api'
 
 class MailsProcessorController < ApplicationController
   before_action :authenticate_user!
-  EMAIL_SLICE_SIZE = Rails.env.development? ? 10 : 1000
+  EMAIL_SLICE_SIZE = Rails.env.development? ? 10 : 5000
 
   def home
     @import_size = Sidekiq::Queue.new.size + Sidekiq::RetrySet.new.size + Sidekiq::ScheduledSet.new.size
@@ -18,7 +18,6 @@ class MailsProcessorController < ApplicationController
       end.reject(&:blank?)
 
       ImportMailWorker.perform_async(new_emails)
-      sleep(0.1)
     end
 
     redirect_to root_path
