@@ -18,6 +18,7 @@ class MailsProcessorController < ApplicationController
       end.reject(&:blank?)
 
       ImportMailWorker.perform_async(new_emails)
+      sleep(0.1)
     end
 
     redirect_to root_path
