@@ -12,7 +12,7 @@ class MailsProcessorController < ApplicationController
     # CSV.foreach(params[:contact][:file_data].path, headers: false).each_slice(EMAIL_SLICE_SIZE) do |csv|
     IO.readlines(params[:contact][:file_data].path).each_slice(EMAIL_SLICE_SIZE) do |lines|
       ImportMailWorker.perform_async(lines)
-      sleep(1)
+      sleep(0.5)
     end
 
     redirect_to root_path
