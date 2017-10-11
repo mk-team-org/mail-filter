@@ -10,7 +10,7 @@ class MailsProcessorController < ApplicationController
     # CSV.foreach(params[:contact][:file_data].path, headers: false).each_slice(EMAIL_SLICE_SIZE) do |csv|
     IO.readlines(params[:contact][:file_data].path).each_slice(EMAIL_SLICE_SIZE) do |lines|
       new_emails = lines.map do |line|
-        line.strip rescue ActiveSupport::Inflector.transliterate(line.strip)
+        ActiveSupport::Inflector.transliterate(line).strip
       end.reject(&:blank?)
       existing_emails = Contact.where(email: new_emails).pluck(:email)
       email_attrs = (new_emails - existing_emails).map{|e| {email: e}}
@@ -23,7 +23,7 @@ class MailsProcessorController < ApplicationController
   def angry
     IO.readlines(params[:contact][:file_data].path).each_slice(EMAIL_SLICE_SIZE) do |lines|
       emails = lines.map do |line|
-        line.strip rescue ActiveSupport::Inflector.transliterate(line.strip)
+        ActiveSupport::Inflector.transliterate(line).strip
       end.reject(&:blank?)
       Contact.where(email: emails).update_all(angry: true)
     end
@@ -34,7 +34,7 @@ class MailsProcessorController < ApplicationController
   def exclude
     IO.readlines(params[:contact][:file_data].path).each_slice(EMAIL_SLICE_SIZE) do |lines|
       emails = lines.map do |line|
-        line.strip rescue ActiveSupport::Inflector.transliterate(line.strip)
+        ActiveSupport::Inflector.transliterate(line).strip
       end.reject(&:blank?)
       Contact.where(email: emails).update_all(excluded: true)
     end
