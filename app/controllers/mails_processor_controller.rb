@@ -11,7 +11,11 @@ class MailsProcessorController < ApplicationController
   def import
     # CSV.foreach(params[:contact][:file_data].path, headers: false).each_slice(EMAIL_SLICE_SIZE) do |csv|
     IO.readlines(params[:contact][:file_data].path).each_slice(EMAIL_SLICE_SIZE) do |lines|
-      ImportMailWorker.perform_async(lines)
+      new_emails = lines.map do |email|
+        ActiveSupport::Inflector.transliterate(email).strip
+      end.reject(&:blank?)
+
+      ImportMailWorker.perform_async(new_emails)
       sleep(0.25)
     end
 
