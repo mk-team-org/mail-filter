@@ -6,7 +6,7 @@ class MailsProcessorController < ApplicationController
   EMAIL_SLICE_SIZE = Rails.env.development? ? 10 : 5000
 
   def home
-    @import_size = Sidekiq::Queue.new.size + Sidekiq::RetrySet.new.size + Sidekiq::ScheduledSet.new.size
+    @import_size = Sidekiq::Queue.new.size + Sidekiq::RetrySet.new.size + Sidekiq::ScheduledSet.new.size + Sidekiq::ProcessSet.new.map{|x| x['busy']}.sum
     @import_in_progress = @import_size.nonzero?
   end
 
