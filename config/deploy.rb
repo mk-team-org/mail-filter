@@ -34,3 +34,5 @@ append :linked_files, "config/database.yml"
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
+
+set :rvm1_map_bins, %w{rake gem bundle ruby}

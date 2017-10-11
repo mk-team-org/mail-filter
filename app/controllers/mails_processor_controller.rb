@@ -7,8 +7,11 @@ class MailsProcessorController < ApplicationController
   end
 
   def import
-    CSV.foreach(params[:contact][:file_data].path, headers: false).each_slice(EMAIL_SLICE_SIZE) do |csv|
-      new_emails = csv.flatten
+    # CSV.foreach(params[:contact][:file_data].path, headers: false).each_slice(EMAIL_SLICE_SIZE) do |csv|
+    IO.readlines(params[:contact][:file_data].path).each_slice(EMAIL_SLICE_SIZE) do |lines|
+      new_emails = lines.map do |line|
+        line.strip rescue ActiveSupport::Inflector.transliterate(line.strip)
+      end.reject(&:blank?)
       existing_emails = Contact.where(email: new_emails).pluck(:email)
       email_attrs = (new_emails - existing_emails).map{|e| {email: e}}
       Contact.bulk_insert(values: email_attrs)
@@ -18,16 +21,22 @@ class MailsProcessorController < ApplicationController
   end
 
   def angry
-    CSV.foreach(params[:contact][:file_data].path, headers: false).each_slice(EMAIL_SLICE_SIZE) do |csv|
-      Contact.where(email: csv.flatten).update_all(angry: true)
+    IO.readlines(params[:contact][:file_data].path).each_slice(EMAIL_SLICE_SIZE) do |lines|
+      emails = lines.map do |line|
+        line.strip rescue ActiveSupport::Inflector.transliterate(line.strip)
+      end.reject(&:blank?)
+      Contact.where(email: emails).update_all(angry: true)
     end
 
     redirect_to root_path
   end
 
   def exclude
-    CSV.foreach(params[:contact][:file_data].path, headers: false).each_slice(EMAIL_SLICE_SIZE) do |csv|
-      Contact.where(email: csv.flatten).update_all(excluded: true)
+    IO.readlines(params[:contact][:file_data].path).each_slice(EMAIL_SLICE_SIZE) do |lines|
+      emails = lines.map do |line|
+        line.strip rescue ActiveSupport::Inflector.transliterate(line.strip)
+      end.reject(&:blank?)
+      Contact.where(email: emails).update_all(excluded: true)
     end
 
     redirect_to root_path
