@@ -21,6 +21,7 @@ gem 'simple_form'
 gem 'bulk_insert'
 gem 'devise'
 gem 'sidekiq'
+gem 'carrierwave'
 
 group :development, :test do
   gem 'puma', '~> 3.0'
