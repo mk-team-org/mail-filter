@@ -16,7 +16,7 @@ table#emails-table
     th Domain
     th NIP
     th Company
-    th Emails
+    th Email
     th Status
     th Actions
   - @sqs.each do |sq|
@@ -30,8 +30,10 @@ table#emails-table
       td
         - if sq.catch_all
           |Catch all
+        - elsif sq.email.present?
+          = link_to sq.email, "mailto:#{sq.email}"
         - else
-          = raw(sq.emails.map {|e| link_to e, "mailto:#{e}" }.join(', '))
+          |-
       td= truncate(sq.status, length: 100)
       td= link_to 'Check similar', '#', class: 'fill'
 

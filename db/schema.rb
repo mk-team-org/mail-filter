@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171031152723) do
+ActiveRecord::Schema.define(version: 20171031192756) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,7 +29,7 @@ ActiveRecord::Schema.define(version: 20171031152723) do
     t.string   "domain",                        null: false
     t.string   "nip",                           null: false
     t.string   "company"
-    t.text     "emails",        default: [],                 array: true
+    t.text     "email",         default: [],                 array: true
     t.boolean  "catch_all",     default: false
     t.boolean  "completed",     default: false
     t.string   "cant_check"
