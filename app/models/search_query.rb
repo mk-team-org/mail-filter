@@ -71,7 +71,10 @@ class SearchQuery < ApplicationRecord
       begin
         result = EmailVerifier.check(email)
         Sidekiq::Logging.logger.info result
-        update_attribute(:emails, emails.push(email)) if result
+        if result
+          update_attribute(:emails, emails.push(email))
+          return email
+        end
       rescue Exception => e
         Sidekiq::Logging.logger.info e.message
         nil
