@@ -67,13 +67,13 @@ class SearchQuery < ApplicationRecord
 
   def perform_main_check
     (possible_emails - tested_emails).each do |email|
-      Rails.logger.info email
+      Sidekiq::Logging.logger.info email
       begin
         result = EmailVerifier.check(email)
-        Rails.logger.info result
+        Sidekiq::Logging.logger.info result
         update_attribute(:emails, emails.push(email)) if result
       rescue Exception => e
-        Rails.logger.info e.message
+        Sidekiq::Logging.logger.info e.message
         nil
       end
       update_attribute(:tested_emails, tested_emails.push(email))
