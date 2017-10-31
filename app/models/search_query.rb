@@ -58,9 +58,11 @@ class SearchQuery < ApplicationRecord
   end
 
   def check_for_catch_all
-    update_attributes(catch_all: true, completed: true) if EmailVerifier.check("rlyrlyanythin@#{domain}")
-  rescue Exception => e
-    update_attributes(cant_check: e.message, completed: true)
+    if EmailVerifier.check("rlyrlyanythin@#{domain}")
+      update_attributes(catch_all: true, completed: true)
+    end
+  rescue
+    nil
   end
 
   def perform_main_check
