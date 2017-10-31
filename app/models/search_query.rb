@@ -82,5 +82,6 @@ class SearchQuery < ApplicationRecord
       update_attribute(:tested_emails, tested_emails.push(email))
       sleep 5
     end
+    update_attribute(:completed, true)
   end
 end
