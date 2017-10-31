@@ -22,8 +22,8 @@ table#emails-table
   - @sqs.each do |sq|
     tr
       td= sq.id
-      td.first= sq.first_name
-      td.last= sq.last_name
+      td.first= sq.first_name.capitalize
+      td.last= sq.last_name.capitalize
       td.domain= link_to sq.domain, "http://#{sq.domain}"
       td.nip= sq.nip
       td.company= sq.company
