@@ -7,7 +7,7 @@ class DnsCheckerController < ApplicationController
   def check
     sq = SearchQuery.new(search_query_params)
     if sq.save
-      in_timer = (SearchQuery.where(completed: false).count - 1) * 90
+      in_timer = (SearchQuery.where(completed: false).count - 1) * 30
       EmailCheckWorker.perform_in(in_timer.seconds, sq.id)
       flash[:success] = 'Queued'
     else
