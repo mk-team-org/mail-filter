@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171016074353) do
+ActiveRecord::Schema.define(version: 20171031152723) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,23 @@ ActiveRecord::Schema.define(version: 20171016074353) do
     t.boolean  "angry",      default: false, null: false
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
+  end
+
+  create_table "search_queries", force: :cascade do |t|
+    t.string   "first_name",                    null: false
+    t.string   "last_name",                     null: false
+    t.string   "domain",                        null: false
+    t.string   "nip",                           null: false
+    t.string   "company"
+    t.text     "emails",        default: [],                 array: true
+    t.boolean  "catch_all",     default: false
+    t.boolean  "completed",     default: false
+    t.string   "cant_check"
+    t.text     "tested_emails", default: [],                 array: true
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.boolean  "in_progress",   default: false
+    t.index ["nip"], name: "index_search_queries_on_nip", using: :btree
   end
 
   create_table "uploaded_files", force: :cascade do |t|

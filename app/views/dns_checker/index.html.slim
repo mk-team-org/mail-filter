@@ -1,0 +1,36 @@
+= simple_form_for SearchQuery.new, url: dns_checker_check_path do |f|
+  = f.input :first_name, placeholder: 'First name', label: false
+  = f.input :last_name, placeholder: 'Last name', label: false
+  = f.input :domain, placeholder: 'Domain', label: false
+  = f.input :nip, placeholder: 'NIP', label: false
+  = f.input :company, placeholder: 'Company', label: false
+  = submit_tag 'Check'
+
+hr
+
+table#emails-table
+  tr
+    th ID
+    th First name
+    th Last name
+    th Domain
+    th NIP
+    th Company
+    th Emails
+    th Status
+  - @sqs.each do |sq|
+    tr
+      td= sq.id
+      td= sq.first_name
+      td= sq.last_name
+      td= link_to sq.domain, "http://#{sq.domain}"
+      td= sq.nip
+      td= sq.company
+      td
+        - if sq.catch_all
+          |Catch all
+        - else
+          = raw(sq.emails.map {|e| link_to e, "mailto:#{e}" }.join(', '))
+      td= truncate(sq.status, length: 100)
+
+= paginate @sqs

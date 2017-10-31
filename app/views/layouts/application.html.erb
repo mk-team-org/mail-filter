@@ -9,6 +9,20 @@
   </head>
 
   <body>
+    <% flashes = {notice: 'success', alert: 'standard', error: 'alert', secondary: 'info'} %>
+    <% flashes.each do |key, value| %>
+      <% if flash[key] %>
+        <%= content_tag :div, :data => { :alert => '' }, :class => "alert-box #{value} radius" do %>
+          <%= flash[key] %>
+          <%= link_to '&times;'.html_safe, '#', :class => 'close'%>
+          <hr>
+        <% end %>
+      <% end %>
+    <% end %>    
+    <div style="margin-bottom: 20px;">
+      <%= link_to "Emails Processor", root_url %> | 
+      <%= link_to "DNS Checker", dns_checker_index_path %>
+    </div>
     <%= yield %>
   </body>
 </html>

@@ -22,6 +22,8 @@ gem 'bulk_insert'
 gem 'devise'
 gem 'sidekiq'
 gem 'carrierwave'
+gem 'email_verifier'
+gem 'kaminari'
 
 group :development, :test do
   gem 'puma', '~> 3.0'
