@@ -1,9 +1,9 @@
 = simple_form_for SearchQuery.new, url: dns_checker_check_path do |f|
   = f.input :first_name, placeholder: 'First name', label: false
   = f.input :last_name, placeholder: 'Last name', label: false
-  = f.input :domain, placeholder: 'Domain', label: false
-  = f.input :nip, placeholder: 'NIP', label: false
-  = f.input :company, placeholder: 'Company', label: false
+  = f.input :domain, placeholder: 'Domain', label: false, input_html: {class: 'domain'}
+  = f.input :nip, placeholder: 'NIP', label: false, input_html: {class: 'nip'}
+  = f.input :company, placeholder: 'Company', label: false, input_html: {class: 'company'}
   = submit_tag 'Check'
 
 hr
@@ -18,19 +18,21 @@ table#emails-table
     th Company
     th Emails
     th Status
+    th Actions
   - @sqs.each do |sq|
     tr
       td= sq.id
-      td= sq.first_name
-      td= sq.last_name
-      td= link_to sq.domain, "http://#{sq.domain}"
-      td= sq.nip
-      td= sq.company
+      td.first= sq.first_name
+      td.last= sq.last_name
+      td.domain= link_to sq.domain, "http://#{sq.domain}"
+      td.nip= sq.nip
+      td.company= sq.company
       td
         - if sq.catch_all
           |Catch all
         - else
           = raw(sq.emails.map {|e| link_to e, "mailto:#{e}" }.join(', '))
       td= truncate(sq.status, length: 100)
+      td= link_to 'Check similar', '#', class: 'fill'
 
 = paginate @sqs

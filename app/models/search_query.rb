@@ -64,11 +64,15 @@ class SearchQuery < ApplicationRecord
   end
 
   def perform_main_check
-    (possible_emails - tested_emails).map do |email|
-      update_attribute(:emails, emails.push(email)) if EmailVerifier.check(email)
+    (possible_emails - tested_emails).each do |email|
+      begin
+        update_attribute(:emails, emails.push(email)) if EmailVerifier.check(email)
+      rescue
+        nil
+      end
       update_attribute(:tested_emails, tested_emails.push(email))
-      sleep 1
+      sleep 5
     end
-    update_attributes(completed: true)
+    update_attribute(:completed, true)
   end
 end
