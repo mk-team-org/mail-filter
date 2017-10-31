@@ -70,7 +70,5 @@ class SearchQuery < ApplicationRecord
       sleep 1
     end
     update_attributes(completed: true)
-  rescue Exception => e
-    update_attributes(cant_check: e.message, completed: true)
   end
 end
